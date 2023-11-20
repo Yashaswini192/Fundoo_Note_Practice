@@ -29,7 +29,7 @@ namespace BusinessLayer.Service
             }
         }
 
-        public User_Entity UserLogin(LoginModel login)
+        public string UserLogin(LoginModel login)
         {
             try
             {

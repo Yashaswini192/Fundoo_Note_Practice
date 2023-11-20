@@ -33,7 +33,7 @@ namespace RepoLayer.Service
                 user.Email = registration.Email;
                 user.Password = registration.Password;
 
-                fundooContext.Add(user);
+                fundooContext.UserTable.Add(user);
                 fundooContext.SaveChanges();
 
                 if (user != null)
@@ -52,15 +52,16 @@ namespace RepoLayer.Service
 
         }
 
-        public User_Entity UserLogin(LoginModel login)
+        public string UserLogin(LoginModel login)
         {
             try
             {
-                var user = fundooContext.User.FirstOrDefault(x => x.Email == login.Email && x.Password == login.Password);
+                var user = fundooContext.UserTable.FirstOrDefault(x => x.Email == login.Email && x.Password == login.Password);
 
                 if(user != null)
                 {
-                    return user;
+                    string token = GenerateToken(login.Email, user.Id);
+                    return token;
                 }
                 else
                 {
@@ -106,11 +107,36 @@ namespace RepoLayer.Service
 
         }
 
+        //public string GenerateToken(string EmailId, long UserId)
+        //{
+        //    try
+        //    {
+        //        var LoginTokenHandler = new JwtSecurityTokenHandler();
+        //        var LoginTokenKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(this.configuration[("Jwt:Key")]));
+        //        var LoginTokenDescriptor = new SecurityTokenDescriptor
+        //        {
+        //            Subject = new ClaimsIdentity(new Claim[]
+        //            {
+        //                new Claim("Email", EmailId.ToString()),
+        //                new Claim("UserID", UserId.ToString()),
+        //            }),
+        //            Expires = DateTime.UtcNow.AddHours(1),
+        //            SigningCredentials = new SigningCredentials(LoginTokenKey, SecurityAlgorithms.HmacSha256Signature),
+        //        };
+        //        var token = LoginTokenHandler.CreateToken(LoginTokenDescriptor);
+        //        return LoginTokenHandler.WriteToken(token);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        throw e;
+        //    }
+        //}
+
         public string ForgotPassword(string email)
         {
             try
             {
-                var check = this.fundooContext.User.Where(x => x.Email == email).FirstOrDefault();
+                var check = this.fundooContext.UserTable.Where(x => x.Email == email).FirstOrDefault();
 
                 if (check != null)
                 {
@@ -137,7 +163,7 @@ namespace RepoLayer.Service
             {
                 if (reset.newPassword.Equals(reset.confirmPassword))
                 {
-                    var result = fundooContext.User.Where(x => x.Email == Email).FirstOrDefault();
+                    var result = fundooContext.UserTable.Where(x => x.Email == Email).FirstOrDefault();
                     result.Password = reset.newPassword;
 
                     fundooContext.SaveChanges();

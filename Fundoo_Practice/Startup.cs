@@ -35,9 +35,11 @@ namespace Fundoo_Practice
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<Fundoo_Context>(opts => opts.UseSqlServer(Configuration["ConnectionStrings:Fundoo_PracticeDB"]));
+            services.AddDbContext<Fundoo_Context>(opts => opts.UseSqlServer(Configuration["ConnectionStrings:Fundoo_Practice"]));
             services.AddTransient<IUserBusiness, UserBusiness>();
             services.AddTransient<IUserRepo,UserRepo>();
+            services.AddTransient<INoteBusiness, NoteBusiness>();
+            services.AddTransient<INoteRepo,Noterepo>();
             services.AddControllers();
 
             services.AddSwaggerGen(c =>
@@ -56,9 +58,11 @@ namespace Fundoo_Practice
                     {
                         Type = ReferenceType.SecurityScheme,
                         Id = JwtBearerDefaults.AuthenticationScheme
+                        //Id = "Bearer"
                     }
                 };
                 c.AddSecurityDefinition(securitySchema.Reference.Id, securitySchema);
+                //c.AddSecurityDefinition("Bearer", securitySchema);
 
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
@@ -91,6 +95,22 @@ namespace Fundoo_Practice
                 };
             });
 
+            //services.AddAuthentication(au =>
+            //{
+            //    au.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            //    au.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            //}).AddJwtBearer(jwt =>
+            //{
+            //    jwt.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+            //    {
+            //        ValidateIssuerSigningKey = true,
+            //        ValidateIssuer = false,
+            //        ValidateAudience = false,
+            //        ValidateLifetime = true,
+            //        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+
+            //    };
+            //});
 
         }
 
@@ -112,6 +132,8 @@ namespace Fundoo_Practice
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
