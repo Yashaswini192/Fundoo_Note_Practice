@@ -81,5 +81,27 @@ namespace RepoLayer.Service
                 throw ex;
             }
         }
+
+
+        public NoteEntity RetreiveNote(int noteId)
+        {
+            try
+            {
+                var result = fundoo.NotesTable.FirstOrDefault(x => x.NoteId == noteId);
+
+                if(result != null)
+                {
+                    return result;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

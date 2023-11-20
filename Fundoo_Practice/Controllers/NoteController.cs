@@ -13,7 +13,7 @@ namespace Fundoo_Practice.Controllers
     public class NoteController : ControllerBase
     {
         private readonly INoteBusiness noteBusiness;
-        
+
 
         public NoteController(INoteBusiness noteBusiness)
         {
@@ -30,7 +30,7 @@ namespace Fundoo_Practice.Controllers
                 int userId = Convert.ToInt32(User.Claims.FirstOrDefault(x => x.Type == "UserID").Value);
                 var result = noteBusiness.CreateNote(model, userId);
 
-                if(result != null)
+                if (result != null)
                 {
                     return Ok(new { success = true, message = "SuccessFully Created Note", data = result });
                 }
@@ -39,7 +39,7 @@ namespace Fundoo_Practice.Controllers
                     return BadRequest(new { success = true, message = "UnsuccessFull" });
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }
@@ -47,7 +47,7 @@ namespace Fundoo_Practice.Controllers
 
         [HttpPost]
         [Route("Update")]
-        public IActionResult UpdateNote(NoteModel model,int NoteId,int userId)
+        public IActionResult UpdateNote(NoteModel model, int NoteId, int userId)
         {
             try
             {
@@ -55,13 +55,37 @@ namespace Fundoo_Practice.Controllers
 
                 var result = noteBusiness.UpdateNote(model, NoteId, userId);
 
-                if(result != null)
+                if (result != null)
                 {
                     return Ok(new { success = true, message = "Updated Note SuccessFully", data = result });
                 }
                 else
                 {
                     return BadRequest(new { success = false, message = "Unable to update Note" });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpGet]
+        [Route("Retreive")]
+
+        public IActionResult RetreiveNote(int NoteId)
+        {
+            try
+            {
+                var result = noteBusiness.RetreiveNote(NoteId);
+
+                if (result != null)
+                {
+                    return Ok(new { success = true, message = "Retreived Successfully", data = result });
+                }
+                else
+                {
+                    return BadRequest(new { success = false, message = "Couldnot find noteid" });
                 }
             }
             catch (Exception ex)

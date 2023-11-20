@@ -11,5 +11,7 @@ namespace BusinessLayer.Interface
         public NoteEntity CreateNote(NoteModel noteModel, int userId);
 
         public NoteEntity UpdateNote(NoteModel noteModel, int NoteId, int userId);
+
+        public NoteEntity RetreiveNote(int noteId);
     }
 }

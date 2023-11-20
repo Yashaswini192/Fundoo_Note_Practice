@@ -40,5 +40,17 @@ namespace BusinessLayer.Service
                 throw ex;
             }
         }
+
+        public NoteEntity RetreiveNote(int noteId)
+        {
+            try
+            {
+                return noteRepo.RetreiveNote(noteId);
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
