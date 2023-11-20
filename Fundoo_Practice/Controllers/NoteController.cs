@@ -93,5 +93,29 @@ namespace Fundoo_Practice.Controllers
                 throw ex;
             }
         }
+
+        [HttpDelete]
+        [Route("Delete")]
+
+        public IActionResult DeleteNote(int NoteId)
+        {
+            try
+            {
+                var result = noteBusiness.DeleteNote(NoteId);
+
+                if(result != null)
+                {
+                    return Ok(new { success = true, message = "Deleted Note" });
+                }
+                else
+                {
+                    return BadRequest(new { success = false, message = "Cannot Delete" });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

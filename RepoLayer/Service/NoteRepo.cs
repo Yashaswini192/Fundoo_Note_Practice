@@ -103,5 +103,28 @@ namespace RepoLayer.Service
                 throw ex;
             }
         }
+
+        public bool DeleteNote(int noteId)
+        {
+            try
+            {
+                var result = fundoo.NotesTable.FirstOrDefault(x => x.NoteId == noteId);
+
+                if(result != null)
+                {
+                    fundoo.Remove(result);
+                    fundoo.SaveChanges();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

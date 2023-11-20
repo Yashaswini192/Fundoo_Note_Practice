@@ -13,5 +13,7 @@ namespace BusinessLayer.Interface
         public NoteEntity UpdateNote(NoteModel noteModel, int NoteId, int userId);
 
         public NoteEntity RetreiveNote(int noteId);
+
+        public bool DeleteNote(int noteId);
     }
 }
